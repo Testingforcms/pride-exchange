@@ -1,0 +1,248 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type WooOrder = 
+ record {
+   billing: Address;
+   customerNote: text;
+   dateCreated: text;
+   id: nat;
+   lineItems: vec LineItemResult;
+   paymentMethod: text;
+   shipping: Address;
+   status: text;
+   total: text;
+ };
+type WooCustomer = 
+ record {
+   billing: Address;
+   email: text;
+   firstName: text;
+   id: nat;
+   lastName: text;
+   shipping: Address;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type Result_8 = 
+ variant {
+   err: text;
+   ok: vec Category;
+ };
+type Result_7 = 
+ variant {
+   err: text;
+   ok: WooOrder;
+ };
+type Result_6 = 
+ variant {
+   err: text;
+   ok: vec WooOrder;
+ };
+type Result_5 = 
+ variant {
+   err: text;
+   ok: Product;
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok: vec Product;
+ };
+type Result_3 = 
+ variant {
+   err: text;
+   ok: vec nat;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: WooCustomer;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: Coupon;
+ };
+type ProductImage = 
+ record {
+   alt: text;
+   id: nat;
+   src: text;
+ };
+type ProductCategory = 
+ record {
+   id: nat;
+   name: text;
+   slug: text;
+ };
+type ProductAttribute = 
+ record {
+   id: nat;
+   name: text;
+   options: vec text;
+ };
+type Product = 
+ record {
+   attributes: vec ProductAttribute;
+   categories: vec ProductCategory;
+   description: text;
+   id: nat;
+   images: vec ProductImage;
+   name: text;
+   price: text;
+   regularPrice: text;
+   salePrice: text;
+   shortDescription: text;
+   slug: text;
+   stockStatus: text;
+   variations: vec nat;
+ };
+type OrderData = 
+ record {
+   billing: Address;
+   couponLines: vec CouponLine;
+   customerId: opt nat;
+   customerNote: text;
+   lineItems: vec LineItem;
+   paymentMethod: text;
+   shipping: Address;
+ };
+type LineItemResult = 
+ record {
+   id: nat;
+   name: text;
+   price: text;
+   productId: nat;
+   quantity: nat;
+   total: text;
+ };
+type LineItem = 
+ record {
+   productId: nat;
+   quantity: nat;
+   variationId: opt nat;
+ };
+type CustomerUpdateData = 
+ record {
+   billing: opt Address;
+   email: opt text;
+   firstName: opt text;
+   lastName: opt text;
+   shipping: opt Address;
+ };
+type CouponLine = record {code: text;};
+type Coupon = 
+ record {
+   amount: text;
+   code: text;
+   discountType: text;
+   minimumAmount: text;
+ };
+type CategoryImage = 
+ record {
+   alt: text;
+   src: text;
+ };
+type Category = 
+ record {
+   count: nat;
+   description: text;
+   id: nat;
+   image: opt CategoryImage;
+   name: text;
+   parentId: nat;
+   slug: text;
+ };
+type Address = 
+ record {
+   address1: text;
+   address2: text;
+   city: text;
+   company: text;
+   country: text;
+   email: text;
+   firstName: text;
+   lastName: text;
+   phone: text;
+   postcode: text;
+   state: text;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  addToWishlist: (productId: nat) -> (Result_2);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  cancelOrder: (orderId: nat) -> (Result_7);
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  createOrder: (orderData: OrderData) -> (Result_7);
+  createWooCustomer: (email: text, firstName: text, lastName: text, password:
+   text) -> (Result_1);
+  getCallerUserRole: () -> (UserRole) query;
+  getCategories: () -> (Result_8);
+  getOrder: (orderId: nat) -> (Result_7);
+  getOrders: (customerId: nat, page: nat, perPage: nat) -> (Result_6);
+  getProduct: (productId: nat) -> (Result_5);
+  getProducts: (page: nat, perPage: nat, categoryId: opt nat, search:
+   opt text, orderby: text, order: text) -> (Result_4);
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  getWishlist: () -> (Result_3) query;
+  getWooCustomer: (customerId: nat) -> (Result_1);
+  isCallerAdmin: () -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  removeFromWishlist: (productId: nat) -> (Result_2);
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateWooCustomer: (customerId: nat, data: CustomerUpdateData) ->
+   (Result_1);
+  validateCoupon: (code: text) -> (Result);
+}

@@ -1,0 +1,31 @@
+{
+  "overview": "A production-ready WooCommerce mobile storefront for thepridexchange.com — featuring guest browsing, full cart/checkout flow, Stripe and PayPal payments, order history, wishlist, and a modern mobile-first UI with light and dark mode.",
+  "features": [
+    "Guest product browsing (no login required)",
+    "Login & registration with WooCommerce customer creation",
+    "Home screen with featured products, new arrivals, and categories",
+    "Product listing with filters — category, price, popularity, latest",
+    "Product detail with image gallery, variations, and add to cart",
+    "Cart with quantity controls, coupon codes, and totals",
+    "Checkout with Stripe and PayPal payment methods",
+    "Order creation and history via live WooCommerce API",
+    "Order tracking with status timeline",
+    "Wishlist for saving favorite products",
+    "Category browsing and product search",
+    "User profile with address management",
+    "Light and dark mode support"
+  ],
+  "category": "ecommerce",
+  "tags": [
+    "woocommerce",
+    "ecommerce",
+    "shop",
+    "mobile",
+    "stripe",
+    "paypal",
+    "cart",
+    "orders",
+    "wishlist"
+  ],
+  "last_updated": "2026-04-24T21:18:16.549Z"
+}
